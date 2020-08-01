@@ -53,10 +53,7 @@ csv2txt <- function(mydir, labels = 1){
 ```{r}
 # Providing the full path to the csv file. Must have quotes and forward slashes. 
 
-
-
 csv2txt("C:/Users/Joshua/Desktop/history/show_description_unique", labels = 1)  
-
 
 ```
  

@@ -10,14 +10,13 @@ library(ggplot2)
 
 ```{r setup, include=FALSE}
 
-count_table <- read.csv(file="c://Users/Joshua/Desktop/history/frequency_data.csv", header=TRUE, sep=",")
+count_table <- read.csv(file="~/Documents/CRDH History/CRDH_history_channel/frequency_data.csv", header=TRUE, sep=",")
 
 show_counts <- count_table %>% 
   count(Show.Name) %>% 
   group_by(Show.Name) %>% 
   mutate(show_count = n()) %>% 
   ungroup()
-
 
 ```
 

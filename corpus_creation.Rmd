@@ -42,12 +42,9 @@ read_corpus <- function(dir) {
 
 ```{r}
 
-sample_corpus <- read_corpus("C:/Users/Joshua/Desktop/history/show_description_unique")
-
+sample_corpus <- read_corpus("~Documents/CRDH_History/CRDH_history_channel/show_description_unique")
 
 #saveRDS(my_corpus, ".rds")
-#my_corpus <-readRDS("wright_corpus.rds")
-
 ```
 
 
@@ -55,6 +52,7 @@ sample_corpus <- read_corpus("C:/Users/Joshua/Desktop/history/show_description_u
 
 
 ```{r}
+#remove examples with only a few words
 sample_corpus <- sample_corpus %>% 
   mutate(words = count_words(text)) 
 
@@ -64,7 +62,7 @@ sample_corpus <- sample_corpus %>%
 
 ```{r}
 ggplot(sample_corpus, aes(x = words)) + geom_histogram(binwidth = 5) +
-  labs(title = "Lengths of Fiction Texts")
+  labs(title = "Lengths of Texts")
 ```
 
 
