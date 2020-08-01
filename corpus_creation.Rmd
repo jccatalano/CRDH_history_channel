@@ -1,0 +1,301 @@
+---
+title: "corpus_creation"
+author: "Joshua Catalano"
+date: "July 19, 2018"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(stringr)
+library(tokenizers)
+library(tidytext)
+library(topicmodels)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r setup, include=FALSE}
+# Load an improved stopwords list 
+
+stopwords_jockers <- read_file("jockers_stop_words.txt")
+stopwords_jockers <- data_frame(stopwords = str_split(stopwords_jockers, ", ")[[1]])
+colnames(stopwords_jockers)[1] <- "word"
+
+```
+
+
+```{r}
+
+# Read Corpus function
+
+read_corpus <- function(dir) {
+  files <- list.files(path = dir, full.names = TRUE)
+  doc_ids <- tools::file_path_sans_ext(basename(files))
+  docs <- purrr::map_chr(files, readr::read_file)
+  tibble::data_frame(doc_id = doc_ids,
+                     filename = basename(files),
+                     text = docs)
+}
+```
+
+
+```{r}
+
+sample_corpus <- read_corpus("C:/Users/Joshua/Desktop/history/show_description_unique")
+
+
+#saveRDS(my_corpus, ".rds")
+#my_corpus <-readRDS("wright_corpus.rds")
+
+```
+
+
+
+
+
+```{r}
+sample_corpus <- sample_corpus %>% 
+  mutate(words = count_words(text)) 
+
+sample_corpus <- sample_corpus %>%
+  filter(words > 5)
+```
+
+```{r}
+ggplot(sample_corpus, aes(x = words)) + geom_histogram(binwidth = 5) +
+  labs(title = "Lengths of Fiction Texts")
+```
+
+
+
+```{r}
+
+#A function to read the document NEEDS TO BE MODIFIED FOR IDS
+read_doc <- function(id) {
+  out <- sample_corpus %>% 
+    filter(filename == id)
+  cat(out[["text"]])
+}
+```
+
+
+```{r}
+
+#Tokenize the Corpus
+
+tokenized_corpus <- sample_corpus %>% 
+  select(filename, text) %>% 
+  unnest_tokens(word, text, token = "words")
+
+word_counts <- tokenized_corpus %>% 
+  count(word, sort = TRUE)
+
+# Words to drop by frequency
+words_to_drop <- word_counts %>% 
+  filter(n <= 2 | n >= 10000) 
+
+# FIlter out specific words
+words_to_drop_2 <- c("chumlee, chum, frank's, chum's, rip, rip's, troy, pawn, guys, stars, rick's, shop, dwaine, las, da, it's, he's, episode, bear, chase, seen, count's, count, kustoms, cold, deal")
+
+words_to_drop_2 <- data_frame(stopwords = str_split(words_to_drop_2, ", ")[[1]])
+colnames(words_to_drop_2)[1] <- "word"
+
+words_to_drop_2 <- as.data.frame(words_to_drop_2)
+names(words_to_drop_2)[1]<-"word"
+
+nrow(words_to_drop) / nrow(word_counts)
+```
+
+
+```{r}
+
+# Drop words by frequency and also stopwords
+
+tokenized_corpus<- tokenized_corpus%>% 
+  anti_join(words_to_drop, by = "word") %>% 
+  anti_join(stopwords_jockers, by = "word") %>%
+  anti_join(words_to_drop_2, by = "word")
+```
+
+```{r}
+#Plot words funtion
+
+plot_words <- function(tidy_df, n = 10) {
+  require(ggplot2)
+  require(dplyr)
+  tidy_df %>%
+    count(word, sort = TRUE) %>%
+    top_n(n = n, n) %>% 
+    mutate(word = reorder(word, n)) %>%
+    ggplot(aes(word, n)) +
+    geom_col() +
+    xlab(NULL) +
+    coord_flip()
+}
+```
+
+```{r}
+plot_words(tokenized_corpus, n = 60)
+```
+```{r}
+ tokenized_corpus %>%
+  count(word, sort = TRUE) %>%
+    top_n(60, n) %>% 
+    mutate(word = reorder(word, n)) %>%
+    ggplot(aes(word, n)) +
+    geom_col(fill = "dark green") +
+    labs(title = "Most Common Words Included in Episode Descriptions", subtitle = "*Pruned vocab not included | each episode only included once", y = "Word Count") +
+    xlab(NULL) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(plot.subtitle = element_text(hjust = 0.5)) +
+    coord_flip()
+```
+
+
+```{r}
+# Get word counts by document
+corpus_counts <- tokenized_corpus %>% 
+  count(filename, word) %>% 
+  group_by(filename) %>% 
+  mutate(total_words = n()) %>% 
+  ungroup()
+
+corpus_tfidf <- corpus_counts %>% 
+  bind_tf_idf(word, filename, n)
+
+corpus_tfidf %>% 
+  arrange(desc(tf_idf)) %>% 
+  mutate(word = factor(word, levels = rev(unique(word)))) %>%
+  top_n(20) %>% 
+  ggplot(aes(word, tf_idf, fill = filename)) +
+  geom_col() +
+  labs(x = NULL, y = "tf-idf") +
+  coord_flip()
+
+corpus_tfidf %>% 
+  arrange(filename, desc(tf_idf)) %>% 
+  group_by(filename) %>% 
+  top_n(10, tf_idf) %>% 
+  summarize(keywords = str_c(word, collapse = ", ")) 
+
+corpus_tfidf %>% 
+  filter(word %in% c("pawn", "weapon")) %>% 
+  arrange(desc(tf_idf)) %>%
+  top_n(20)
+```
+
+```{r}
+## Topic models
+set.seed(3452)
+#We have to cast our data frame to a sparse matrix.
+
+corpus_dtm <- corpus_counts %>% 
+  filter(filename %in% sample_corpus$filename) %>% 
+  cast_dtm(filename, word, n)
+
+# Look at the dtm
+corpus_dtm
+
+corpus_dtm[1:6, 1:6] %>% as.matrix()
+
+```
+```{r}
+
+#Creat LDA Corpora by differnt numbers of topics
+corpus_lda <- LDA(corpus_dtm, k = 20, control = list(seed = 6432))
+```
+
+
+```{r}
+# Creating and rds to save time
+
+#saveRDS(wright_lda, "wright_sample_lda.rds")
+#wright_lda <- readRDS("wright_sample_lda")
+
+# if (!file.exists("corpus_lda.rds")) {
+#  system.time({corpus_lda <- LDA(wright_dtm, k = 50, control = list(seed = 6432))})
+#  saveRDS(corpus_lda, "wright_lda.rds")
+# } else {
+#  corpus_lda <- readRDS("corpus_lda.rds")
+#}
+```
+
+
+
+```{r}
+corpus_topics <- tidy(corpus_lda, matrix = "beta")
+
+corpus_topics_display <- corpus_topics %>% 
+  mutate(beta = round(beta, 4)) %>% 
+  group_by(topic) %>% 
+  top_n(15, beta) %>% 
+  arrange(topic, desc(beta))
+
+```
+
+
+
+ 
+```{r}
+corpus_topics_display %>% 
+  group_by(topic) %>% 
+  summarize(words = str_c(term, collapse = ", "))
+```
+
+```{r}
+corpus_topics %>%
+  group_by(topic) %>%
+  top_n(12, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta) %>% 
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip()
+```
+
+```{r}
+#We can also get the association between documents and topics.
+
+corpus_docs <- tidy(corpus_lda, matrix = "gamma")
+
+corpus_docs %>% 
+  mutate(gamma = round(gamma, 2)) %>% 
+  group_by(topic) %>% 
+  filter(gamma > 0.2) %>% 
+  top_n(10, gamma) %>% 
+  arrange(topic, desc(gamma))
+```
+
+```{r}
+# Repeating the process with a different number of topics
+corpus_lda2 <- LDA(corpus_dtm, k = 12, control = list(seed = 6432))
+
+corpus_topics2 <- tidy(corpus_lda2, matrix = "beta")
+
+corpus_topics_display2 <- corpus_topics2 %>% 
+  mutate(beta = round(beta, 4)) %>% 
+  group_by(topic) %>% 
+  top_n(20, beta) %>% 
+  arrange(topic, desc(beta))
+
+corpus_topics_display2 %>% 
+  group_by(topic)  
+  # % summarize(words = str_c(term, collapse = ", "))
+
+corpus_topics2 %>%
+  group_by(topic) %>%
+  top_n(20, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta) %>% 
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, nrow = 3, scales = "free") +
+  coord_flip()
+```
+
+
+  

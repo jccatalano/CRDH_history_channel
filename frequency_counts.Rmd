@@ -1,0 +1,49 @@
+---
+title: "Untitled"
+author: "Joshua Catalano"
+date: "July 30, 2018"
+output: html_document
+---
+```{r}
+library(ggplot2)
+```
+
+```{r setup, include=FALSE}
+
+count_table <- read.csv(file="c://Users/Joshua/Desktop/history/frequency_data.csv", header=TRUE, sep=",")
+
+show_counts <- count_table %>% 
+  count(Show.Name) %>% 
+  group_by(Show.Name) %>% 
+  mutate(show_count = n()) %>% 
+  ungroup()
+
+
+```
+
+
+
+```{r}
+show_counts %>% 
+  filter(Show.Name != c("999", "888")) %>%
+  filter(Show.Name != "777") %>%
+  top_n(15, n) %>%
+ggplot(aes(x = reorder(Show.Name, - n),  y = n)) + 
+  geom_bar(stat="identity", width=.5, fill="tomato3") + 
+  labs(title="Total Number of Episodes Aired", x = "Show", y = "Number of episodes aired") + 
+   theme(plot.title = element_text(hjust = 0.5)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+
+```{r}
+episode_counts <- count_table %>% 
+  count(Title) %>% 
+  group_by(Title) %>% 
+    ungroup()
+  
+colnames(episode_counts)[colnames(episode_counts)=="n"] <- "episode_count"
+
+```
+

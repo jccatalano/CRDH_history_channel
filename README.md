@@ -1,2 +1,3 @@
-# CRDH_history_channel
-This is a line from R Studio
+## Conspiracies, Work, and War: The Construction of Rural, White Masculinity on History
+
+This repository contains the code and data for Briana Pocratsky and Joshua Catalano's paper, "Conspiracies, Work, and War: The Construction of Rural, White Masculinity on History" presented at the Media Preconference to the 2018 ASA conference. In order to run the code locally, the file paths will need to be modified to first create the files from the provided CSVs and generate the corpus. 
