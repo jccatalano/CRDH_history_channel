@@ -26,7 +26,7 @@ colnames(stopwords_jockers)[1] <- "word"
 
 ```
 
-Create a functino to read in a corpus.
+Create a functino to read-in a corpus.
 
 ```{r}
 
@@ -42,7 +42,7 @@ read_corpus <- function(dir) {
 }
 ```
 
-Read in the corpus. Note: This file path should be a folder containing all of the .txt files. 
+Read-in the corpus. Note: This file path should be a folder containing all of the .txt files. 
 
 ```{r}
 #This is a folder of text files created from the csv_2_text_script.Rmd
@@ -51,9 +51,7 @@ sample_corpus <- read_corpus("/Users/josh/Documents/CRDH_History/CRDH_history_ch
 #saveRDS(my_corpus, ".rds")
 ```
 
-
-
-
+Filter out any potential texts with only a few words.
 
 ```{r}
 #remove examples with only a few words
@@ -64,12 +62,14 @@ sample_corpus <- sample_corpus %>%
   filter(words > 5)
 ```
 
+Plot the texts by word length.
+
 ```{r}
 ggplot(sample_corpus, aes(x = words)) + geom_histogram(binwidth = 5) +
   labs(title = "Lengths of Texts")
 ```
 
-
+A function to allow you to easily red the text of a particular document. 
 
 ```{r}
 
@@ -81,6 +81,7 @@ read_doc <- function(id) {
 }
 ```
 
+Create a tokenized forpus to examin word counts. 
 
 ```{r}
 
@@ -95,6 +96,9 @@ word_counts <- tokenized_corpus %>%
 
 
 ```
+
+Prune the vocabulary to remove outliers, proper names, and words specific to the corpuse that may throw off the topic models.
+
 ```{r}
 #Pruning the vocabulary to remove outliers, proper names, and words specific to the corpuse that may throw off the topic models.
 
@@ -114,6 +118,7 @@ names(words_to_drop_2)[1]<-"word"
 nrow(words_to_drop) / nrow(word_counts)
 ```
 
+Dropping words by frequency and stopwords. 
 
 ```{r}
 
@@ -191,6 +196,8 @@ corpus_tfidf %>%
   arrange(desc(tf_idf)) %>%
   top_n(20)
 ```
+
+### Generating topic models
 
 ```{r}
 ## Topic models
