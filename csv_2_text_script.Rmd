@@ -60,4 +60,4 @@ csv2txt <- function(mydir, labels = 1){
 csv2txt("/Users/josh/Documents/CRDH_History/CRDH_history_channel/text_files", labels = 1)  
 
 ```
- 
+After generating the files, remove the csv from the folder.  
