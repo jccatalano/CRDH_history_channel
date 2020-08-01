@@ -4,10 +4,14 @@ author: "Joshua Catalano"
 date: "July 22, 2018"
 output: html_document
 ---
+This notebook contains instructions for how to create the text files from the CSV. It is necessary to follow the instructions provided in the source_url. In order to use this function, you will need to create a folder that contains only the CSV file (show_description_unique.csv). In this case, I created a folder called show_description_unique_folder_with_csv_file. 
 
 ```{r setup, include=FALSE}
 
-#loading the function to convert csv to test files
+#loading the function to convert csv to text files
+
+#NOTE READ DIRECTIONS FOR THIS FUNCTION AT URL
+#windows users need Rtools installed, mac users need XCode installed
 
 library(devtools)
 
@@ -51,9 +55,9 @@ csv2txt <- function(mydir, labels = 1){
 
 
 ```{r}
-# Providing the full path to the csv file. Must have quotes and forward slashes. 
+# Providing the full path to the folder containing the csv file. Must have quotes and forward slashes. 
 
-csv2txt("C:/Users/Joshua/Desktop/history/show_description_unique", labels = 1)  
+csv2txt("/Users/josh/Documents/CRDH_History/CRDH_history_channel/text_files", labels = 1)  
 
 ```
  
