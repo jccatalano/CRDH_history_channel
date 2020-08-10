@@ -302,7 +302,7 @@ corpus_topics_display2 %>%
 
 topic_labs <- c("1" = "1 - Apocalyptic/Prophecy", "2" = "2 - Treasure hunting","3" = "3 - Bladesmithing", "4" = "4 - Collecting/Cars", "5" = "5 - Space and Technology", "6" = "6 - Competition/Killing", "7" = "7 - Collecting/Antiques", "8" = "8 - American military", "9" = "9 - Mixed", "10" = "10 - Aliens", "11" = "11 - Classic Cars", "12" = "12 - Capitalism")
 
-corpus_topics2 %>%
+figure_1 <- corpus_topics2 %>%
   group_by(topic) %>%
   top_n(20, beta) %>%
   ungroup() %>%
@@ -315,8 +315,12 @@ corpus_topics2 %>%
   ylab("Word Probability Per Topic") +
   geom_col(show.legend = FALSE) +
   facet_wrap(~ topic, nrow = 3, scales = "free", labeller=labeller(topic = topic_labs)) +
-  coord_flip()
+  coord_flip() 
 ```
 
 
+```{r}
+# Code to save output
+# ggsave("figure_1.png", plot = figure_1, height = 9, width = 12)
+```
   
