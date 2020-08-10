@@ -300,7 +300,7 @@ corpus_topics_display2 %>%
   group_by(topic)  
   # % summarize(words = str_c(term, collapse = ", "))
 
-topic_labs <- c("1" = "Topic 1", "2" = "Topic 2","3" = "Topic 3", "4" = "Topic 4", "5" = "Topic 5", "6" = "Topic 6", "7" = "Topic 7", "8" = "Topic 8", "9" = "Topic 9", "10" = "Topic 10", "11" = "Topic 11", "12" = "Topic 12")
+topic_labs <- c("1" = "1 - Apocalyptic/Prophecy", "2" = "2 - Treasure hunting","3" = "3 - Bladesmithing", "4" = "4 - Collecting/Cars", "5" = "5 - Space and Technology", "6" = "6 - Competition/Killing", "7" = "7 - Collecting/Antiques", "8" = "8 - American military", "9" = "9 - Mixed", "10" = "10 - Aliens", "11" = "11 - Classic Cars", "12" = "12 - Capitalism")
 
 corpus_topics2 %>%
   group_by(topic) %>%
