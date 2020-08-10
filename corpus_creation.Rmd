@@ -14,6 +14,7 @@ library(tidytext)
 library(topicmodels)
 library(dplyr)
 library(ggplot2)
+library(reshape2)
 ```
 Import a list of stopwords.
 
@@ -299,6 +300,8 @@ corpus_topics_display2 %>%
   group_by(topic)  
   # % summarize(words = str_c(term, collapse = ", "))
 
+topic_labs <- c("1" = "Topic 1", "2" = "Topic 2","3" = "Topic 3", "4" = "Topic 4", "5" = "Topic 5", "6" = "Topic 6", "7" = "Topic 7", "8" = "Topic 8", "9" = "Topic 9", "10" = "Topic 10", "11" = "Topic 11", "12" = "Topic 12")
+
 corpus_topics2 %>%
   group_by(topic) %>%
   top_n(20, beta) %>%
@@ -306,8 +309,12 @@ corpus_topics2 %>%
   arrange(topic, -beta) %>% 
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
+  labs(title="Topics on History") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Terms") +
+  ylab("Word Probability Per Topic") +
   geom_col(show.legend = FALSE) +
-  facet_wrap(~ topic, nrow = 3, scales = "free") +
+  facet_wrap(~ topic, nrow = 3, scales = "free", labeller=labeller(topic = topic_labs)) +
   coord_flip()
 ```
 
