@@ -70,7 +70,7 @@ ggplot(sample_corpus, aes(x = words)) + geom_histogram(binwidth = 5) +
   labs(title = "Lengths of Texts")
 ```
 
-A function to allow you to easily red the text of a particular document. 
+A function to allow you to easily read the text of a particular document. 
 
 ```{r}
 
@@ -82,7 +82,9 @@ read_doc <- function(id) {
 }
 ```
 
-Create a tokenized forpus to examin word counts. 
+Tokenize the Corpus
+
+Create a tokenized corpus to examine word counts. 
 
 ```{r}
 
@@ -98,16 +100,16 @@ word_counts <- tokenized_corpus %>%
 
 ```
 
-Prune the vocabulary to remove outliers, proper names, and words specific to the corpuse that may throw off the topic models.
+Prune the vocabulary to remove outliers, proper names, and words specific to the corpus that may throw off the topic models.
 
 ```{r}
-#Pruning the vocabulary to remove outliers, proper names, and words specific to the corpuse that may throw off the topic models.
+#Pruning the vocabulary to remove outliers, proper names, and words specific to the corpus that may throw off the topic models.
 
 # Words to drop by frequency
 words_to_drop <- word_counts %>% 
   filter(n <= 2 | n >= 10000) 
 
-# FIlter out specific words
+# Filter out specific words
 words_to_drop_2 <- c("chumlee, chum, frank's, chum's, rip, rip's, troy, pawn, guys, stars, rick's, shop, dwaine, las, da, it's, he's, episode, bear, chase, seen, count's, count, kustoms, cold, deal")
 
 words_to_drop_2 <- data_frame(stopwords = str_split(words_to_drop_2, ", ")[[1]])
@@ -131,6 +133,8 @@ tokenized_corpus<- tokenized_corpus%>%
   anti_join(words_to_drop_2, by = "word")
 ```
 
+Create a fucntion to plot words. 
+
 ```{r}
 #Plot words funtion
 
@@ -148,9 +152,14 @@ plot_words <- function(tidy_df, n = 10) {
 }
 ```
 
+Plot the tokenized corpus.
+
 ```{r}
 plot_words(tokenized_corpus, n = 60)
 ```
+
+Create figure 2.
+
 ```{r}
 figure_2 <- tokenized_corpus %>%
   count(word, sort = TRUE) %>%
@@ -173,6 +182,7 @@ figure_2 <- tokenized_corpus %>%
 
 ```
 
+Examine the corpus using tfidf and word counts.
 
 ```{r}
 # Get word counts by document

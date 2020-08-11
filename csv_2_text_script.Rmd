@@ -4,6 +4,9 @@ author: "Joshua Catalano"
 date: "July 22, 2018"
 output: html_document
 ---
+
+Note: the zip file already contains the output of this process in a folder called "text_files." You only need to run this code if you want to recreate the files from the CSV. 
+
 This notebook contains instructions for how to create the text files from the CSV. It is necessary to follow the instructions provided in the source_url. In order to use this function, you will need to create a folder that contains only the CSV file (show_description_unique.csv). In this case, I created a folder called show_description_unique_folder_with_csv_file. 
 
 ```{r setup, include=FALSE}

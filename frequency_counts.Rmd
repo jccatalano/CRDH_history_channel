@@ -8,6 +8,8 @@ output: html_document
 library(ggplot2)
 ```
 
+The notebook contains the code used to make figure 3. 
+
 ```{r setup, include=FALSE}
 
 count_table <- read.csv(file="~/Documents/CRDH_History/CRDH_history_channel/frequency_data.csv", header=TRUE, sep=",")
@@ -37,7 +39,6 @@ ggplot(aes(x = reorder(Show.Name, - n),  y = n)) +
 ```{r}
 ggsave("figure_3.png", plot = figure_3, height = 8, width = 11)
 ```
-
 
 
 ```{r}
