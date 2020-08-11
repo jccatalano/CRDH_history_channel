@@ -1,6 +1,6 @@
 ## What’s on History?: Tuning into Conspiracies, Capitalism, and Masculinity 
 
-This repository contains the code and data for Joshua Catalano and Briana Pocratsky's the article titled "What’s on History?: Tuning into Conspiracies, Capitalism, and Masculinity" published in the 2020 issue of Current Research in Digital History.
+This repository contains the code and data for Joshua Catalano and Briana Pocratsky's article titled "What’s on History?: Tuning into Conspiracies, Capitalism, and Masculinity" published in the 2020 issue of Current Research in Digital History.
 
 ### Explanation of Files
 
@@ -21,7 +21,7 @@ This repository contains the code and data for Joshua Catalano and Briana Pocrat
 
 ### How to Run the Code Locally
 
-1. Dowload the files
+1. Dowload the files.
 2. Update the file paths contained in corpus_creation.Rmd and frequency_counts.Rmd to corespond to the location where you downloaded the files. In particular, you will need to provide the path to the text_files folder in order to generate the corpus.
 3. Use the code provided in corpus_creation.Rmd to generate topic models.
 4. Use the code provided in frequency_counts.Rmd to plot word frequency. 
