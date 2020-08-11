@@ -152,17 +152,25 @@ plot_words <- function(tidy_df, n = 10) {
 plot_words(tokenized_corpus, n = 60)
 ```
 ```{r}
- tokenized_corpus %>%
+figure_2 <- tokenized_corpus %>%
   count(word, sort = TRUE) %>%
     top_n(60, n) %>% 
     mutate(word = reorder(word, n)) %>%
     ggplot(aes(word, n)) +
     geom_col(fill = "dark green") +
-    labs(title = "Most Common Words Included in Episode Descriptions", subtitle = "*Pruned vocab not included | each episode only included once", y = "Word Count") +
-    xlab(NULL) +
+    labs(title = "Most Common Words Included in History Episode Descriptions", subtitle = "*Pruned vocab not included | each episode only included once", y = "Word Count") +
+    ylab("Word Count") +
+    xlab("Word") +
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(plot.subtitle = element_text(hjust = 0.5)) +
     coord_flip()
+```
+
+
+```{r}
+# TO SAVE PNG FILE
+# ggsave("figure_2.png", plot = figure_2, height = 10, width = 11)
+
 ```
 
 
