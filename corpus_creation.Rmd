@@ -170,15 +170,20 @@ figure_2 <- tokenized_corpus %>%
     labs(title = "Most Common Words Included in History Episode Descriptions", subtitle = "*Pruned vocab not included | each episode only included once", y = "Word Count") +
     ylab("Word Count") +
     xlab("Word") +
-    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(plot.title = element_text(hjust = 0.5, size =18)) +
     theme(plot.subtitle = element_text(hjust = 0.5)) +
+    theme(axis.title.y = element_text(size = 16)) +
+    theme(axis.title.x = element_text(size = 16)) +
+    theme(axis.title.x = element_text(margin = margin(t = 12, r = 00, b = 10, l = 0))) +
+    theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 12))) +
+    theme(plot.title = element_text(margin = margin(t = 15, r = 00, b = 8, l = 0))) +
     coord_flip()
 ```
 
 
 ```{r}
 # TO SAVE PNG FILE
-# ggsave("figure_2.png", plot = figure_2, height = 10, width = 11)
+ ggsave("figure_2.png", plot = figure_2, height = 10, width = 11)
 
 ```
 
@@ -328,7 +333,12 @@ figure_1 <- corpus_topics2 %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   labs(title="Topics on History") +
-  theme(plot.title = element_text(hjust = 0.5)) +
+  theme(plot.title = element_text(hjust = 0.5, size = 18)) +
+  theme(axis.title.y = element_text(size = 16)) +
+  theme(axis.title.x = element_text(size = 16)) +
+  theme(axis.title.x = element_text(margin = margin(t = 15, r = 00, b = 8, l = 0))) +
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 15))) +
+  theme(plot.title = element_text(margin = margin(t = 15, r = 00, b = 15, l = 0))) +
   xlab("Terms") +
   ylab("Word Probability Per Topic") +
   geom_col(show.legend = FALSE) +
@@ -339,6 +349,6 @@ figure_1 <- corpus_topics2 %>%
 
 ```{r}
 # Code to save output
-# ggsave("figure_1.png", plot = figure_1, height = 9, width = 12)
+ ggsave("figure_1.png", plot = figure_1, height = 9, width = 12)
 ```
   
