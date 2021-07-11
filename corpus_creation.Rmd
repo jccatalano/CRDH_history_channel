@@ -180,6 +180,34 @@ figure_2 <- tokenized_corpus %>%
     coord_flip()
 ```
 
+```{r}
+#code for updated figure 2 for LSU press
+figure_2_1 <- tokenized_corpus %>%
+  count(word, sort = TRUE) %>%
+    top_n(25, n) %>% 
+    mutate(word = reorder(word, n)) %>%
+    ggplot(aes(word, n)) +
+    geom_col(fill = "dark green") +
+    labs(title = "Most Common Words Included in History Episode Descriptions", subtitle = "*Pruned vocab not included | each episode only included once", y = "Word Count") +
+    ylab("Word Count") +
+    xlab("Word") +
+    theme(plot.title = element_text(hjust = 0.5, size =16)) +
+    theme(plot.subtitle = element_text(hjust = 0.5)) +
+    theme(axis.title.y = element_text(size = 15)) +
+    theme(axis.title.x = element_text(size = 15)) +
+    theme(axis.title.x = element_text(margin = margin(t = 12, r = 00, b = 10, l = 0))) +
+    theme(axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 12))) +
+    theme(plot.title = element_text(margin = margin(t = 15, r = 00, b = 8, l = 0))) +
+    theme(axis.text.x = element_text(size = 14)) +
+    theme(axis.text.y = element_text(size = 14)) +
+    coord_flip()
+```
+
+```{r}
+# TO SAVE PNG FILE
+ ggsave("figure_2_1.png", plot = figure_2_1, height = 10, width = 9)
+
+```
 
 ```{r}
 # TO SAVE PNG FILE
