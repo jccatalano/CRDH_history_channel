@@ -187,7 +187,7 @@ figure_2_1 <- tokenized_corpus %>%
     top_n(25, n) %>% 
     mutate(word = reorder(word, n)) %>%
     ggplot(aes(word, n)) +
-    geom_col(fill = "black") +
+    geom_col(fill = "grey40") +
     labs(title = "Most Common Words Included in History Episode Descriptions", subtitle = "*Pruned vocab not included | each episode only included once", y = "Word Count") +
     ylab("Word Count") +
     xlab("Word") +
@@ -378,5 +378,36 @@ figure_1 <- corpus_topics2 %>%
 ```{r}
 # Code to save output
  ggsave("figure_1.png", plot = figure_1, height = 9, width = 12)
+```
+  
+  
+```{r}
+# Formatting changes for LSU press. 
+figure_1_1 <- corpus_topics2 %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta) %>% 
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta)) +
+  labs(title="Topics on History") +
+  theme(plot.title = element_text(hjust = 0.5, size = 14)) +
+  theme(axis.title.y = element_text(size = 12)) +
+  theme(axis.title.x = element_text(size = 12)) +
+  theme(axis.title.x = element_text(margin = margin(t = 15, r = 00, b = 8, l = 0))) +
+  theme(axis.title.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 15))) +
+  theme(plot.title = element_text(margin = margin(t = 15, r = 00, b = 15, l = 0))) +
+  theme(axis.text.x = element_text(size = 8)) +
+  theme(axis.text.y = element_text(size = 11)) +
+  xlab("Terms") +
+  ylab("Word Probability Per Topic") +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, nrow = 5, scales = "free", labeller=labeller(topic = topic_labs)) +
+  coord_flip() 
+```
+  
+```{r}
+# Code to save output
+ ggsave("figure_1_1.jpg", plot = figure_1_1, height = 10, width = 8)
 ```
   

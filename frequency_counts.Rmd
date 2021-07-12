@@ -52,7 +52,7 @@ figure_3_1 <- show_counts %>%
   filter(Show.Name != "777") %>%
   top_n(11, n) %>%
 ggplot(aes(x = reorder(Show.Name, - n),  y = n)) + 
-  geom_bar(stat="identity", width=.5, fill="black") + 
+  geom_bar(stat="identity", width=.5, fill="grey40") + 
   labs(title="Total Number of Episodes, By Show, Aired on History, 5/15/18 - 6/13/18", x = "Show", y = "Number of episodes aired") + 
     theme(plot.title = element_text(hjust = 0.5, size = 14)) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1, size =12)) +
