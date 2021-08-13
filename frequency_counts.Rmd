@@ -20,6 +20,7 @@ show_counts <- count_table %>%
   mutate(show_count = n()) %>% 
   ungroup()
 
+
 ```
 
 
