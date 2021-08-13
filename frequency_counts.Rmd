@@ -21,6 +21,7 @@ show_counts <- count_table %>%
   ungroup()
 
 
+
 ```
 
 
